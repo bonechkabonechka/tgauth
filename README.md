@@ -1,12 +1,12 @@
 # Telegram Mini App Authentication
 
-Telegram Mini App с JWT авторизацией, SQLite базой данных и Express сервером.
+Telegram Mini App с JWT авторизацией, SQLite базой данных (Turso) и Vercel деплоем.
 
 ## 🚀 Быстрый старт
 
-### Деплой на сервер
+### Деплой на Vercel
 
-Следуйте инструкции: **[DEPLOY_FROM_GITHUB.md](./DEPLOY_FROM_GITHUB.md)**
+Следуйте инструкции: **[VERCEL_DEPLOY.md](./VERCEL_DEPLOY.md)**
 
 ### Локальная разработка
 
@@ -14,66 +14,67 @@ Telegram Mini App с JWT авторизацией, SQLite базой данны�
 # Установите зависимости
 npm install
 
-# Запустите frontend и backend одновременно
-npm run dev
+# Установите Vercel CLI
+npm i -g vercel
 
-# Frontend: http://localhost:5173
-# Backend: http://localhost:3000
+# Запустите dev сервер
+vercel dev
+
+# Frontend и API: http://localhost:3000
 ```
 
 ## 📁 Структура проекта
 
 ```
 tgauth/
-├── server/              # Express backend
-│   ├── index.ts        # Главный файл сервера
-│   ├── routes/         # API routes
-│   ├── db/             # SQLite база данных
-│   └── utils/          # Утилиты (JWT, валидация)
-├── src/                # React frontend
-├── api/                # Vercel API routes (альтернатива)
-├── nginx/              # Nginx конфигурация
-├── Dockerfile          # Docker образ
-├── docker-compose.yml  # Docker Compose конфигурация
-└── .env                # Переменные окружения (создайте сами)
+├── api/                # Vercel API Routes
+│   ├── auth/          # API endpoints
+│   │   ├── signin.ts  # POST /api/auth/signin
+│   │   └── protected.ts # GET /api/auth/protected
+│   ├── db/            # Turso (SQLite) база данных
+│   │   ├── init.ts    # Инициализация БД
+│   │   └── users.ts   # Работа с пользователями
+│   └── utils/         # Утилиты
+│       ├── jwt.ts     # JWT токены
+│       └── validateInitData.ts # Валидация Telegram
+├── src/               # React frontend
+├── vercel.json        # Конфигурация Vercel
+└── package.json       # Зависимости
 ```
 
 ## 🔧 Настройка
 
 ### Переменные окружения
 
-Создайте файл `.env`:
+В Vercel Dashboard → Settings → Environment Variables:
 
 ```env
-NODE_ENV=production
-PORT=3000
+TURSO_DATABASE_URL=libsql://your-db-name-xxx.turso.io
+TURSO_AUTH_TOKEN=your-auth-token-here
 BOT_TOKEN=your-bot-token-from-botfather
 JWT_ACCESS_SECRET=your-access-secret-min-64-chars
 JWT_REFRESH_SECRET=your-refresh-secret-min-64-chars
-DB_PATH=/app/data/database.db
-ALLOWED_ORIGIN=*
 ```
+
+Для локальной разработки создайте `.env.local` с теми же переменными.
 
 ## 📚 Документация
 
-- **[DEPLOY_FROM_GITHUB.md](./DEPLOY_FROM_GITHUB.md)** - Деплой с GitHub на сервер
-- **[DOCKER_DEPLOY.md](./DOCKER_DEPLOY.md)** - Подробная инструкция по Docker
-- **[SERVER_DEPLOY.md](./SERVER_DEPLOY.md)** - Деплой без Docker
-- **[QUICK_START.md](./QUICK_START.md)** - Быстрый старт
+- **[VERCEL_DEPLOY.md](./VERCEL_DEPLOY.md)** - Деплой на Vercel с GitHub
+- **[INSTRUCTIONS.md](./INSTRUCTIONS.md)** - Подробная инструкция по настройке
 
 ## 🛠️ Технологии
 
 - **Frontend:** React + TypeScript + Vite
-- **Backend:** Express + TypeScript
-- **База данных:** SQLite (better-sqlite3)
+- **Backend:** Vercel Serverless Functions (Node.js)
+- **База данных:** Turso (распределенный SQLite)
 - **Авторизация:** JWT (access + refresh tokens)
-- **Деплой:** Docker + Docker Compose + Nginx
+- **Деплой:** Vercel
 
 ## 📝 API Endpoints
 
 - `POST /api/auth/signin` - Авторизация через Telegram Mini App
 - `GET /api/auth/protected` - Защищенный endpoint (проверка токенов)
-- `GET /health` - Health check
 
 ## 🔒 Безопасность
 
@@ -81,29 +82,34 @@ ALLOWED_ORIGIN=*
 - Валидация Telegram initData
 - JWT токены с коротким временем жизни
 - CORS настройки
-- SQLite с индексами для производительности
+- Turso с индексами для производительности
 
 ## 📦 Деплой
 
-### Docker (рекомендуется)
+### Через GitHub (рекомендуется)
+
+1. Запушьте код в GitHub
+2. Импортируйте проект в Vercel
+3. Настройте переменные окружения
+4. Задеплойте
+
+Подробнее: [VERCEL_DEPLOY.md](./VERCEL_DEPLOY.md)
+
+### Через Vercel CLI
 
 ```bash
-docker compose build
-docker compose up -d
+vercel login
+vercel --prod
 ```
-
-### Без Docker
-
-См. [SERVER_DEPLOY.md](./SERVER_DEPLOY.md)
 
 ## 🆘 Поддержка
 
 Если возникли проблемы:
 
-1. Проверьте логи: `docker compose logs -f app`
-2. Проверьте `.env` файл
-3. Проверьте статус: `docker compose ps`
-4. См. раздел "Решение проблем" в [DEPLOY_FROM_GITHUB.md](./DEPLOY_FROM_GITHUB.md)
+1. Проверьте логи в Vercel Dashboard → Functions → Logs
+2. Проверьте переменные окружения
+3. Проверьте что Turso база создана и токены правильные
+4. См. раздел "Решение проблем" в [VERCEL_DEPLOY.md](./VERCEL_DEPLOY.md)
 
 ## 📄 Лицензия
 
