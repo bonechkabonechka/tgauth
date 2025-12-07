@@ -9,7 +9,8 @@ function AppContent() {
   const theme = tg?.themeParams;
 
   // Проверяем, запущено ли приложение в Telegram Mini App
-  const isMiniApp = !!tg;
+  // Более надежная проверка - наличие initData
+  const isMiniApp = !!(tg && tg.initData);
 
   // Получаем цвета темы
   const textColor = theme?.text_color || '#000000';
@@ -66,31 +67,8 @@ function AppContent() {
     );
   }
 
-  // Пользователь не авторизован
+  // Пользователь не авторизован - всегда показываем кнопку входа
   if (!isAuthenticated || !user) {
-    // Если это Mini App - показываем сообщение
-    if (isMiniApp) {
-      return (
-        <div style={{ 
-          color: textColor, 
-          backgroundColor: bgColor,
-          minHeight: '100vh',
-          padding: '20px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <div style={{ textAlign: 'center' }}>
-            <p>Данные пользователя недоступны</p>
-            <p style={{ color: hintColor, fontSize: '14px', marginTop: '10px' }}>
-              Убедитесь, что приложение запущено через Telegram
-            </p>
-          </div>
-        </div>
-      );
-    }
-
-    // Если это браузер - показываем BrowserAuth
     return <BrowserAuth />;
   }
 
