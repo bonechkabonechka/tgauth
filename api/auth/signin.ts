@@ -17,9 +17,12 @@ export default async function handler(
 ): Promise<void> {
   // Инициализируем БД при первом запросе
   try {
+    console.log('Инициализация БД...');
     await initDatabase();
+    console.log('БД успешно инициализирована');
   } catch (error) {
     console.error('Ошибка инициализации БД:', error);
+    // Не прерываем выполнение, продолжаем
   }
 
   // Настройка CORS

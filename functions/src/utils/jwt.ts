@@ -1,5 +1,4 @@
-import * as jwt from 'jsonwebtoken';
-
+import jwt from 'jsonwebtoken';
 export interface JWTPayload {
   id: string;
   tg_id: number;
