@@ -1,69 +1,110 @@
-# React + TypeScript + Vite
+# Telegram Mini App Authentication
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Telegram Mini App с JWT авторизацией, SQLite базой данных и Express сервером.
 
-Currently, two official plugins are available:
+## 🚀 Быстрый старт
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Деплой на сервер
 
-## Expanding the ESLint configuration
+Следуйте инструкции: **[DEPLOY_FROM_GITHUB.md](./DEPLOY_FROM_GITHUB.md)**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Локальная разработка
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# Установите зависимости
+npm install
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+# Запустите frontend и backend одновременно
+npm run dev
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Frontend: http://localhost:5173
+# Backend: http://localhost:3000
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📁 Структура проекта
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+tgauth/
+├── server/              # Express backend
+│   ├── index.ts        # Главный файл сервера
+│   ├── routes/         # API routes
+│   ├── db/             # SQLite база данных
+│   └── utils/          # Утилиты (JWT, валидация)
+├── src/                # React frontend
+├── api/                # Vercel API routes (альтернатива)
+├── nginx/              # Nginx конфигурация
+├── Dockerfile          # Docker образ
+├── docker-compose.yml  # Docker Compose конфигурация
+└── .env                # Переменные окружения (создайте сами)
+```
+
+## 🔧 Настройка
+
+### Переменные окружения
+
+Создайте файл `.env`:
+
+```env
+NODE_ENV=production
+PORT=3000
+BOT_TOKEN=your-bot-token-from-botfather
+JWT_ACCESS_SECRET=your-access-secret-min-64-chars
+JWT_REFRESH_SECRET=your-refresh-secret-min-64-chars
+DB_PATH=/app/data/database.db
+ALLOWED_ORIGIN=*
+```
+
+## 📚 Документация
+
+- **[DEPLOY_FROM_GITHUB.md](./DEPLOY_FROM_GITHUB.md)** - Деплой с GitHub на сервер
+- **[DOCKER_DEPLOY.md](./DOCKER_DEPLOY.md)** - Подробная инструкция по Docker
+- **[SERVER_DEPLOY.md](./SERVER_DEPLOY.md)** - Деплой без Docker
+- **[QUICK_START.md](./QUICK_START.md)** - Быстрый старт
+
+## 🛠️ Технологии
+
+- **Frontend:** React + TypeScript + Vite
+- **Backend:** Express + TypeScript
+- **База данных:** SQLite (better-sqlite3)
+- **Авторизация:** JWT (access + refresh tokens)
+- **Деплой:** Docker + Docker Compose + Nginx
+
+## 📝 API Endpoints
+
+- `POST /api/auth/signin` - Авторизация через Telegram Mini App
+- `GET /api/auth/protected` - Защищенный endpoint (проверка токенов)
+- `GET /health` - Health check
+
+## 🔒 Безопасность
+
+- HTTP-only cookies для токенов
+- Валидация Telegram initData
+- JWT токены с коротким временем жизни
+- CORS настройки
+- SQLite с индексами для производительности
+
+## 📦 Деплой
+
+### Docker (рекомендуется)
+
+```bash
+docker compose build
+docker compose up -d
+```
+
+### Без Docker
+
+См. [SERVER_DEPLOY.md](./SERVER_DEPLOY.md)
+
+## 🆘 Поддержка
+
+Если возникли проблемы:
+
+1. Проверьте логи: `docker compose logs -f app`
+2. Проверьте `.env` файл
+3. Проверьте статус: `docker compose ps`
+4. См. раздел "Решение проблем" в [DEPLOY_FROM_GITHUB.md](./DEPLOY_FROM_GITHUB.md)
+
+## 📄 Лицензия
+
+MIT

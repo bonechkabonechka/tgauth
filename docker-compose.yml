@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ton10-app
+    container_name: tgauth-app
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -23,7 +23,7 @@ services:
       # Монтируем логи (опционально)
       - ./logs:/app/logs
     networks:
-      - ton10-network
+      - tgauth-network
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/health"]
       interval: 30s
@@ -33,7 +33,7 @@ services:
 
   nginx:
     image: nginx:alpine
-    container_name: ton10-nginx
+    container_name: tgauth-nginx
     restart: unless-stopped
     ports:
       - "80:80"
@@ -45,9 +45,9 @@ services:
     depends_on:
       - app
     networks:
-      - ton10-network
+      - tgauth-network
 
 networks:
-  ton10-network:
+  tgauth-network:
     driver: bridge
 
