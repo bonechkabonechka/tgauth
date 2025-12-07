@@ -1,5 +1,5 @@
 import * as crypto from 'crypto';
-import { getDatabase } from './init';
+import { getDatabase } from './init.js';
 
 export interface User {
   id: string;

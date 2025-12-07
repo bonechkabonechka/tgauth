@@ -6,7 +6,7 @@
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "types": ["node"]
+    "types": ["node", "@vercel/node"]
   },
   "include": ["vite.config.ts", "api/**/*"]
 }

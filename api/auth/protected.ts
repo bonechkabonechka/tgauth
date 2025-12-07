@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { verifyAccessToken, refreshAccessToken } from '../utils/jwt';
-import { getUserByTgId } from '../db/users';
+import { verifyAccessToken, refreshAccessToken } from '../utils/jwt.js';
+import { getUserByTgId } from '../db/users.js';
 import * as cookie from 'cookie';
 
 /**

@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { validateInitData, parseInitData } from '../utils/validateInitData';
-import { createTokens } from '../utils/jwt';
-import { findOrCreateUser } from '../db/users';
-import { initDatabase } from '../db/init';
+import { validateInitData, parseInitData } from '../utils/validateInitData.js';
+import { createTokens } from '../utils/jwt.js';
+import { findOrCreateUser } from '../db/users.js';
+import { initDatabase } from '../db/init.js';
 
 const BOT_TOKEN = process.env.BOT_TOKEN || '';
 
