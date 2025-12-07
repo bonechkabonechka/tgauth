@@ -45,5 +45,24 @@ export async function initDatabase(): Promise<void> {
   await db.execute(`
     CREATE INDEX IF NOT EXISTS idx_users_tg_id ON users(tg_id)
   `);
-}
 
+  // НОВАЯ ТАБЛИЦА: auth_sessions для временных токенов браузерной авторизации
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS auth_sessions (
+      token TEXT PRIMARY KEY,
+      user_id TEXT,
+      access_token TEXT,
+      refresh_token TEXT,
+      status TEXT NOT NULL DEFAULT 'pending',
+      created_at INTEGER NOT NULL,
+      expires_at INTEGER NOT NULL,
+      used_at INTEGER
+    )
+  `);
+
+  // Индекс для быстрого поиска по статусу и времени истечения
+  await db.execute(`
+    CREATE INDEX IF NOT EXISTS idx_auth_sessions_status_expires 
+    ON auth_sessions(status, expires_at)
+  `);
+}
