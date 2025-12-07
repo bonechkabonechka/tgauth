@@ -8,10 +8,6 @@ function AppContent() {
   const tg = window.Telegram?.WebApp;
   const theme = tg?.themeParams;
 
-  // Проверяем, запущено ли приложение в Telegram Mini App
-  // Более надежная проверка - наличие initData
-  const isMiniApp = !!(tg && tg.initData);
-
   // Получаем цвета темы
   const textColor = theme?.text_color || '#000000';
   const bgColor = theme?.bg_color || '#ffffff';
