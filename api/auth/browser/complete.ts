@@ -101,7 +101,8 @@ export default async function handler(
     }
 
     // 8. Возвращаем успешный ответ с callback URL
-    const callbackUrl = `${SITE_URL}/auth/callback?token=${token}`;
+    // Правильный путь: /api/auth/callback (API endpoint, не фронтенд)
+    const callbackUrl = `${SITE_URL}/api/auth/callback?token=${token}`;
 
     response.status(200).json({
       success: true,

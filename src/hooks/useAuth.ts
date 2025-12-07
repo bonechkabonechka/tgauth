@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type {AuthState, AuthContextType } from '../types/auth';
 import { API_URL } from '../config/api';
 
@@ -120,6 +120,11 @@ export function useAuth(): AuthContextType {
       error: null,
     });
   }, []);
+
+  // Автоматически проверяем авторизацию при загрузке
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   return {
     ...state,

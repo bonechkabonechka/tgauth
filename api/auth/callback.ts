@@ -50,9 +50,22 @@ export default async function handler(
 
     // Устанавливаем токены в HTTP-only cookies
     const maxAge = 7 * 24 * 60 * 60; // 7 дней в секундах
+    const isProduction = process.env.VERCEL_ENV === 'production';
+    const cookieOptions = [
+      `HttpOnly`,
+      `SameSite=Strict`,
+      `Max-Age=${maxAge}`,
+      `Path=/`,
+    ];
+    
+    // Secure только в production (HTTPS)
+    if (isProduction) {
+      cookieOptions.push('Secure');
+    }
+
     response.setHeader('Set-Cookie', [
-      `ACCESS_TOKEN=${session.access_token}; HttpOnly; Secure; SameSite=Strict; Max-Age=${maxAge}; Path=/`,
-      `REFRESH_TOKEN=${session.refresh_token}; HttpOnly; Secure; SameSite=Strict; Max-Age=${maxAge}; Path=/`,
+      `ACCESS_TOKEN=${session.access_token}; ${cookieOptions.join('; ')}`,
+      `REFRESH_TOKEN=${session.refresh_token}; ${cookieOptions.join('; ')}`,
     ]);
 
     // Помечаем сессию как использованную
